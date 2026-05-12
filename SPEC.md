@@ -1,9 +1,9 @@
 # Serious Growth — iOS App Specification
 
-**Version:** 0.2
-**Status:** Updated — Incorporating Review Feedback
+**Version:** 0.3
+**Status:** All decisions resolved — ready for implementation
 **Last Updated:** 2026-05-12
-**Changes from v0.1:** All open questions resolved except OQ-7 (see conflict note); reviewer feedback incorporated throughout; data model expanded; First Launch Onboarding section added; 72-day schedule and exercise library appendices added.
+**Changes from v0.2:** OQ-7 resolved — canonical lbs storage confirmed. All 10 open questions now closed.
 
 ---
 
@@ -485,29 +485,14 @@ Built-in `Exercise` records are **seeded into SwiftData on first launch** using 
 
 ---
 
-### 6.3 ⚠️ OQ-7 Conflict — Weight Storage Unit
+### 6.3 Weight Storage Unit — Resolved
 
-**This decision requires explicit sign-off before implementation.**
+**Decision: Store all weights in lbs (`weightLbs`). Convert at display/input boundaries only.**
 
-| Stakeholder | Position | Rationale |
-|-------------|----------|-----------|
-| **Owner (you)** | Store in active unit (whatever the user has selected at log time) | Simpler mental model; no conversion at entry time |
-| **Reviewer** | Store canonically in lbs (`weightLbs`); convert only at display/input boundaries | Unit switching later will not corrupt old data; math is simpler; consistent with `distanceMiles` on `CardioSession` |
-
-**Implications of each choice:**
-
-*Active units (owner preference):*
-- Must store a `unit: String` flag alongside every `weightLbs` field so the app knows what unit was used
-- If user switches units, old data is displayed wrong unless the app knows the original unit
-- Requires re-labeling the field to `weight` + `weightUnit` on `WorkoutSet`
-
-*Canonical lbs (reviewer preference):*
-- A single `weightLbs: Double` field; no per-record unit flag needed
-- Unit change only affects the display layer
-- Consistent with how `distanceMiles` is already designed on `CardioSession`
-- Industry standard for fitness apps
-
-**Current spec draft uses canonical lbs.** Please confirm or override.
+- `WorkoutSet.weightLbs: Double` — always lbs, no per-record unit flag needed
+- `CardioSession.distanceMiles: Double` — always miles, consistent pattern
+- Unit change in Settings affects the display layer only; no data migration required
+- Input in metric: app converts kg → lbs before storing (`enteredKg × 2.20462`)
 
 ---
 
@@ -688,7 +673,7 @@ All 6 model types: `AppState`, `WorkoutSession`, `SessionExercise`, `WorkoutSet`
 | OQ-4 | Empty session save? | **Require ≥ 1 completed set** | Prevents meaningless entries |
 | OQ-5 | Date range on charts? | **30d / 3mo / All time** | v1 (F-23) |
 | OQ-6 | Deleted exercise in history? | **Keep name string** | `exerciseName` is denormalized |
-| **OQ-7** | **Weight storage unit?** | **⚠️ UNRESOLVED CONFLICT** | See [Section 6.3](#63-️-oq-7-conflict--weight-storage-unit) |
+| OQ-7 | Weight storage unit? | **Canonical lbs** — store `weightLbs`; convert at display/input only | Consistent with `distanceMiles`; unit switch never corrupts data |
 | OQ-8 | Recommendation basis? | **Max weight of most recent completed session** | Not "last set by number" |
 | OQ-9 | Weight floor? | **5 lbs / 2.5 kg, only when history exists** | Blank field if no history |
 | OQ-10 | Cardio counts for streak? | **Yes** | Label as "Activity Streak" |
