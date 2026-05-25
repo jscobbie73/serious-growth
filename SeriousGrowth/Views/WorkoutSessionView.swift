@@ -154,7 +154,7 @@ struct WorkoutSessionView: View {
         session = s
     }
 
-    private func preferredExercise(for group: String) -> String {
+    private func preferredExercise(for group: MuscleGroup) -> String {
         let recent = allSessions
             .sorted { $0.date > $1.date }
             .flatMap { $0.sessionExercises }
@@ -177,7 +177,7 @@ struct WorkoutSessionView: View {
         return (w * 1.05 * 4).rounded() / 4  // round to nearest 0.25
     }
 
-    private func swapExercise(in session: WorkoutSession, forGroup group: String, to newName: String) {
+    private func swapExercise(in session: WorkoutSession, forGroup group: MuscleGroup, to newName: String) {
         // session was built from workoutDay.assignments, which always contains an entry for every group.
         let ex = session.sessionExercises.first(where: { $0.muscleGroup == group })!
         ex.exerciseName = newName
@@ -209,7 +209,7 @@ struct ExerciseCard: View {
                 VStack(alignment: .leading, spacing: 2) {
                     Text(sessionExercise.exerciseName)
                         .font(.headline)
-                    Text(sessionExercise.muscleGroup)
+                    Text(sessionExercise.muscleGroup.rawValue)
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
@@ -313,7 +313,7 @@ struct SetRow: View {
 }
 
 struct ExercisePickerView: View {
-    let muscleGroup: String
+    let muscleGroup: MuscleGroup
     let allExercises: [Exercise]
     let onSelect: (String) -> Void
 
@@ -347,7 +347,7 @@ struct ExercisePickerView: View {
                 }
             }
             .searchable(text: $search, prompt: "Search exercises")
-            .navigationTitle(muscleGroup)
+            .navigationTitle(muscleGroup.rawValue)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {

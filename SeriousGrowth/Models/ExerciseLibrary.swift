@@ -2,23 +2,21 @@ import Foundation
 
 enum ExerciseLibrary {
 
-    static let muscleGroups: [String] = [
-        "Back", "Chest", "Bicep", "Calf", "Delts", "Tricep", "Thighs", "Abs"
+    static let muscleGroups: [MuscleGroup] = MuscleGroup.allCases
+
+    static let muscleGroupIcon: [MuscleGroup: String] = [
+        .back:   "figure.strengthtraining.traditional",
+        .chest:  "heart.fill",
+        .bicep:  "figure.arms.open",
+        .calf:   "figure.walk",
+        .delts:  "figure.boxing",
+        .tricep: "figure.cooldown",
+        .thighs: "figure.run",
+        .abs:    "figure.core.training"
     ]
 
-    static let muscleGroupIcon: [String: String] = [
-        "Back":   "figure.strengthtraining.traditional",
-        "Chest":  "heart.fill",
-        "Bicep":  "figure.arms.open",
-        "Calf":   "figure.walk",
-        "Delts":  "figure.boxing",
-        "Tricep": "figure.cooldown",
-        "Thighs": "figure.run",
-        "Abs":    "figure.core.training"
-    ]
-
-    static let defaults: [String: [String]] = [
-        "Back": [
+    static let defaults: [MuscleGroup: [String]] = [
+        .back: [
             "Barbell Row",
             "Dumbbell Row",
             "Lat Pulldown",
@@ -33,7 +31,7 @@ enum ExerciseLibrary {
             "Rack Pull",
             "Inverted Row"
         ],
-        "Chest": [
+        .chest: [
             "Barbell Bench Press",
             "Dumbbell Bench Press",
             "Incline Barbell Press",
@@ -48,7 +46,7 @@ enum ExerciseLibrary {
             "Landmine Press",
             "Incline Cable Fly"
         ],
-        "Bicep": [
+        .bicep: [
             "Barbell Curl",
             "Dumbbell Curl",
             "Hammer Curl",
@@ -61,7 +59,7 @@ enum ExerciseLibrary {
             "Reverse Curl",
             "Cross-Body Hammer Curl"
         ],
-        "Calf": [
+        .calf: [
             "Standing Calf Raise",
             "Seated Calf Raise",
             "Leg Press Calf Raise",
@@ -70,7 +68,7 @@ enum ExerciseLibrary {
             "Smith Machine Calf Raise",
             "Calf Press (Machine)"
         ],
-        "Delts": [
+        .delts: [
             "Overhead Press (Barbell)",
             "Overhead Press (Dumbbell)",
             "Lateral Raise",
@@ -85,7 +83,7 @@ enum ExerciseLibrary {
             "Face Pull",
             "Plate Front Raise"
         ],
-        "Tricep": [
+        .tricep: [
             "Tricep Pushdown (Cable)",
             "Skull Crusher",
             "Close-Grip Bench Press",
@@ -99,7 +97,7 @@ enum ExerciseLibrary {
             "Tate Press",
             "Single-Arm Pushdown"
         ],
-        "Thighs": [
+        .thighs: [
             "Barbell Squat",
             "Leg Press",
             "Hack Squat",
@@ -115,7 +113,7 @@ enum ExerciseLibrary {
             "Step-Up",
             "Sissy Squat"
         ],
-        "Abs": [
+        .abs: [
             "Crunch",
             "Plank",
             "Russian Twist",
@@ -132,11 +130,11 @@ enum ExerciseLibrary {
         ]
     ]
 
-    static func defaultExercises(for muscleGroup: String) -> [String] {
+    static func defaultExercises(for muscleGroup: MuscleGroup) -> [String] {
         defaults[muscleGroup] ?? []
     }
 
-    static func icon(for muscleGroup: String) -> String {
+    static func icon(for muscleGroup: MuscleGroup) -> String {
         muscleGroupIcon[muscleGroup] ?? "dumbbell.fill"
     }
 

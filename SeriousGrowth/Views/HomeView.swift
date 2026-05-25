@@ -247,7 +247,7 @@ struct HomeView: View {
         HStack(spacing: 4) {
             Image(systemName: ExerciseLibrary.icon(for: assignment.muscleGroup))
                 .font(.caption)
-            Text("\(assignment.muscleGroup) ×\(assignment.sets)")
+            Text("\(assignment.muscleGroup.rawValue) ×\(assignment.sets)")
                 .font(.caption)
         }
         .padding(.horizontal, 8)
