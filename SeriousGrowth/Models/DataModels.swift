@@ -187,17 +187,3 @@ extension Int {
         return h > 0 ? "\(h)h \(m)m" : "\(m)m"
     }
 }
-
-import SwiftUI
-
-struct CardMaterial: ViewModifier {
-    func body(content: Content) -> some View {
-        content.background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 16))
-    }
-}
-
-extension View {
-    func cardMaterial() -> some View {
-        modifier(CardMaterial())
-    }
-}
