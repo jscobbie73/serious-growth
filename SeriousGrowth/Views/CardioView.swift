@@ -72,7 +72,7 @@ struct CardioView: View {
             )
             Divider().frame(height: 50)
             summaryTile(
-                value: formatTotalTime(sessions.filter(\.hasDuration).map(\.durationSeconds).reduce(0, +)),
+                value: sessions.filter(\.hasDuration).map(\.durationSeconds).reduce(0, +).formattedAsDuration,
                 label: "Total Time",
                 icon: "timer",
                 color: .orange
@@ -90,12 +90,6 @@ struct CardioView: View {
         .frame(maxWidth: .infinity)
     }
 
-    private func formatTotalTime(_ seconds: Int) -> String {
-        let hours = seconds / 3600
-        let minutes = (seconds % 3600) / 60
-        if hours > 0 { return "\(hours)h \(minutes)m" }
-        return "\(minutes)m"
-    }
 }
 
 // MARK: - CardioDetailRow

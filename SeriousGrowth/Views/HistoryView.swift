@@ -134,7 +134,7 @@ struct CardioRowView: View {
                 Text(session.date.formatted(date: .abbreviated, time: .omitted))
                     .font(.subheadline.weight(.semibold))
                 Spacer()
-                Text(session.cardioType)
+                Text(session.cardioType.rawValue)
                     .font(.caption)
                     .foregroundStyle(.blue)
             }

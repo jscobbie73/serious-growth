@@ -1,8 +1,6 @@
 import SwiftUI
 import SwiftData
 
-// MARK: - WorkoutSessionView
-
 struct WorkoutSessionView: View {
     let workoutDay: WorkoutDay
     let phaseIndex: Int
@@ -179,8 +177,6 @@ struct WorkoutSessionView: View {
         return (w * 1.05 * 4).rounded() / 4  // round to nearest 0.25
     }
 
-    // MARK: - Swap Exercise
-
     private func swapExercise(in session: WorkoutSession, forGroup group: String, to newName: String) {
         guard let ex = session.sessionExercises.first(where: { $0.muscleGroup == group }) else { return }
         ex.exerciseName = newName
@@ -188,16 +184,12 @@ struct WorkoutSessionView: View {
         for set in ex.sets { set.weight = recWeight }
     }
 
-    // MARK: - Finish
-
     private func finishWorkout() {
         session?.durationSeconds = Int(Date().timeIntervalSince(workoutStartTime))
         onComplete()
         dismiss()
     }
 }
-
-// MARK: - ExerciseCard
 
 struct ExerciseCard: View {
     @Bindable var sessionExercise: SessionExercise
@@ -209,7 +201,6 @@ struct ExerciseCard: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            // Header
             HStack {
                 Image(systemName: ExerciseLibrary.icon(for: sessionExercise.muscleGroup))
                     .foregroundStyle(.orange)
@@ -235,7 +226,6 @@ struct ExerciseCard: View {
                     .foregroundStyle(.blue)
             }
 
-            // Sets
             VStack(spacing: 8) {
                 HStack {
                     Text("Set").font(.caption.weight(.semibold)).foregroundStyle(.secondary).frame(width: 32, alignment: .leading)
@@ -254,8 +244,6 @@ struct ExerciseCard: View {
         .cardMaterial()
     }
 }
-
-// MARK: - SetRow
 
 struct SetRow: View {
     @Bindable var set: WorkoutSet
@@ -321,8 +309,6 @@ struct SetRow: View {
         .opacity(set.isCompleted ? 0.7 : 1.0)
     }
 }
-
-// MARK: - Exercise Picker
 
 struct ExercisePickerView: View {
     let muscleGroup: String

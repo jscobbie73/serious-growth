@@ -140,9 +140,8 @@ enum ExerciseLibrary {
         muscleGroupIcon[muscleGroup] ?? "dumbbell.fill"
     }
 
-    // Cardio type options
-    static let cardioTypes: [String] = [
-        "Running", "Walking", "Cycling", "Swimming", "Rowing",
-        "Elliptical", "Jump Rope", "HIIT", "Stairmaster", "Other"
+    static let cardioTypes: [CardioType] = [
+        .running, .walking, .cycling, .swimming, .rowing,
+        .elliptical, .jumpRope, .hiit, .stairmaster, .other
     ]
 }

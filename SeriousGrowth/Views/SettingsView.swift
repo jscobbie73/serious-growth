@@ -10,7 +10,6 @@ struct SettingsView: View {
     var body: some View {
         NavigationStack {
             Form {
-                // Weight units
                 Section("Units") {
                     if let state {
                         Toggle("Use Kilograms (kg)", isOn: Binding(
@@ -20,7 +19,6 @@ struct SettingsView: View {
                     }
                 }
 
-                // Program overview
                 Section("18-Week Program") {
                     ForEach(ProgramData.phases) { phase in
                         HStack {
@@ -40,7 +38,6 @@ struct SettingsView: View {
                     }
                 }
 
-                // About
                 Section("About") {
                     LabeledContent("App", value: "Serious Growth")
                     LabeledContent("Program", value: "Level 1 — 18 Weeks")
@@ -48,7 +45,6 @@ struct SettingsView: View {
                     LabeledContent("Version", value: "1.0.0")
                 }
 
-                // Reset
                 Section {
                     Button("Reset Program Position", role: .destructive) {
                         state?.currentPhaseIndex = 0

@@ -1,5 +1,19 @@
 import SwiftUI
 
+// MARK: - Shared View Utilities
+
+struct CardMaterial: ViewModifier {
+    func body(content: Content) -> some View {
+        content.background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 16))
+    }
+}
+
+extension View {
+    func cardMaterial() -> some View {
+        modifier(CardMaterial())
+    }
+}
+
 struct ContentView: View {
     @State private var selectedTab = 0
 

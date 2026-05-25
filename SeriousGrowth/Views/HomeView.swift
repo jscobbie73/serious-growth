@@ -64,25 +64,14 @@ struct HomeView: View {
         var streak = 0
         var checkDate = today
 
-        while true {
-            let hasActivity = sessions.contains {
-                calendar.startOfDay(for: $0.date) == checkDate
-            } || cardioSessions.contains {
-                calendar.startOfDay(for: $0.date) == checkDate
-            }
+        // If today has no activity, start looking from yesterday
+        if !hasActivityOn(date: today) {
+            checkDate = calendar.date(byAdding: .day, value: -1, to: today)!
+        }
 
-            if hasActivity {
-                streak += 1
-                checkDate = calendar.date(byAdding: .day, value: -1, to: checkDate)!
-            } else if checkDate == today {
-                // Not active today — look one day back before giving up
-                checkDate = calendar.date(byAdding: .day, value: -1, to: checkDate)!
-                let yesterday = hasActivityOn(date: checkDate)
-                if yesterday { streak += 1; checkDate = calendar.date(byAdding: .day, value: -1, to: checkDate)! }
-                else { break }
-            } else {
-                break
-            }
+        while hasActivityOn(date: checkDate) {
+            streak += 1
+            checkDate = calendar.date(byAdding: .day, value: -1, to: checkDate)!
         }
         return streak
     }
@@ -124,7 +113,7 @@ struct HomeView: View {
             streakStat(value: longestStreak, label: "Best Streak", icon: "trophy.fill", color: .yellow)
         }
         .padding()
-        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 16))
+        .cardMaterial()
     }
 
     private func streakStat(value: Int, label: String, icon: String, color: Color) -> some View {
@@ -165,7 +154,7 @@ struct HomeView: View {
             }
         }
         .padding()
-        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 16))
+        .cardMaterial()
     }
 
     private var todayCard: some View {
@@ -213,7 +202,7 @@ struct HomeView: View {
             }
         }
         .padding()
-        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 16))
+        .cardMaterial()
     }
 
     private func resumeCard(session: WorkoutSession) -> some View {
@@ -235,7 +224,7 @@ struct HomeView: View {
             }
         }
         .padding()
-        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 16))
+        .cardMaterial()
     }
 
     @ViewBuilder

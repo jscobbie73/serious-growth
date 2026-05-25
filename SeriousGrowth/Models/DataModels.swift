@@ -197,16 +197,3 @@ extension Int {
     }
 }
 
-import SwiftUI
-
-struct CardMaterial: ViewModifier {
-    func body(content: Content) -> some View {
-        content.background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 16))
-    }
-}
-
-extension View {
-    func cardMaterial() -> some View {
-        modifier(CardMaterial())
-    }
-}
