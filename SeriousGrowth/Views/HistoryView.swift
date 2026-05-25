@@ -108,7 +108,7 @@ struct WorkoutRowView: View {
             Text(session.dayLabel)
                 .font(.caption)
                 .foregroundStyle(.secondary)
-            Text(session.sessionExercises.map { $0.muscleGroup }.joined(separator: " · "))
+            Text(session.sessionExercises.map { $0.muscleGroup.rawValue }.joined(separator: " · "))
                 .font(.caption)
                 .foregroundStyle(.tertiary)
                 .lineLimit(1)
@@ -197,7 +197,7 @@ struct WeightProgressView: View {
     @Query(sort: \WorkoutSession.date) private var sessions: [WorkoutSession]
     @Query private var appStates: [AppState]
 
-    @State private var selectedMuscleGroup = "Back"
+    @State private var selectedMuscleGroup = MuscleGroup.back
     @State private var selectedExercise: String? = nil
 
     private var useKg: Bool { appStates.first?.useKilograms ?? false }
@@ -227,12 +227,12 @@ struct WeightProgressView: View {
             VStack(spacing: 16) {
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 8) {
-                        ForEach(ExerciseLibrary.muscleGroups, id: \.self) { group in
+                        ForEach(ExerciseLibrary.muscleGroups) { group in
                             Button {
                                 selectedMuscleGroup = group
                                 selectedExercise = exercisesForGroup.first
                             } label: {
-                                Text(group)
+                                Text(group.rawValue)
                                     .font(.caption.weight(.semibold))
                                     .padding(.horizontal, 12)
                                     .padding(.vertical, 6)
@@ -246,7 +246,7 @@ struct WeightProgressView: View {
                 }
 
                 if exercisesForGroup.isEmpty {
-                    Text("No data for \(selectedMuscleGroup)")
+                    Text("No data for \(selectedMuscleGroup.rawValue)")
                         .foregroundStyle(.secondary)
                         .padding()
                 } else {

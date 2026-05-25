@@ -5,7 +5,7 @@ struct ExercisesView: View {
     @Query(sort: \Exercise.name) private var exercises: [Exercise]
     @Environment(\.modelContext) private var context
 
-    @State private var selectedGroup = "Back"
+    @State private var selectedGroup = MuscleGroup.back
     @State private var showAddSheet = false
     @State private var search = ""
     @State private var showDeleteConfirm: Exercise? = nil
@@ -22,13 +22,13 @@ struct ExercisesView: View {
             VStack(spacing: 0) {
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 8) {
-                        ForEach(ExerciseLibrary.muscleGroups, id: \.self) { group in
+                        ForEach(ExerciseLibrary.muscleGroups) { group in
                             Button {
                                 selectedGroup = group
                             } label: {
                                 HStack(spacing: 4) {
                                     Image(systemName: ExerciseLibrary.icon(for: group))
-                                    Text(group)
+                                    Text(group.rawValue)
                                 }
                                 .font(.caption.weight(.semibold))
                                 .padding(.horizontal, 12)
@@ -70,7 +70,7 @@ struct ExercisesView: View {
                     }
                 }
                 .listStyle(.plain)
-                .searchable(text: $search, prompt: "Search \(selectedGroup)")
+                .searchable(text: $search, prompt: "Search \(selectedGroup.rawValue)")
             }
             .navigationTitle("Exercises")
             .toolbar {
@@ -98,14 +98,14 @@ struct ExercisesView: View {
 }
 
 struct AddExerciseSheet: View {
-    let defaultGroup: String
+    let defaultGroup: MuscleGroup
     @Environment(\.modelContext) private var context
     @Environment(\.dismiss) private var dismiss
 
     @State private var name = ""
-    @State private var muscleGroup: String
+    @State private var muscleGroup: MuscleGroup
 
-    init(defaultGroup: String) {
+    init(defaultGroup: MuscleGroup) {
         self.defaultGroup = defaultGroup
         _muscleGroup = State(initialValue: defaultGroup)
     }
@@ -117,8 +117,8 @@ struct AddExerciseSheet: View {
                     TextField("Name", text: $name)
 
                     Picker("Muscle Group", selection: $muscleGroup) {
-                        ForEach(ExerciseLibrary.muscleGroups, id: \.self) { group in
-                            Text(group).tag(group)
+                        ForEach(ExerciseLibrary.muscleGroups) { group in
+                            Text(group.rawValue).tag(group)
                         }
                     }
                 }
