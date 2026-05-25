@@ -89,8 +89,8 @@ struct HomeView: View {
 
     private var longestStreak: Int {
         let calendar = Calendar.current
-        let allDates = (sessions.map { calendar.startOfDay(for: $0.date) } +
-                        cardioSessions.map { calendar.startOfDay(for: $0.date) })
+        let allDates = Set(sessions.map { calendar.startOfDay(for: $0.date) } +
+                           cardioSessions.map { calendar.startOfDay(for: $0.date) })
             .sorted()
         guard !allDates.isEmpty else { return 0 }
         var longest = 1, current = 1
@@ -180,7 +180,7 @@ struct HomeView: View {
                     VStack(alignment: .leading, spacing: 4) {
                         Text("Today — Day \(workoutDay.dayNumber)")
                             .font(.headline)
-                        Text("\(workoutDay.cycleType) · \(workoutDay.repRangeMin)–\(workoutDay.repRangeMax) reps · \(workoutDay.restSeconds)s rest")
+                        Text("\(workoutDay.cycleType.rawValue) · \(workoutDay.repRangeMin)–\(workoutDay.repRangeMax) reps · \(workoutDay.restSeconds)s rest")
                             .font(.caption)
                             .foregroundStyle(.secondary)
                     }
@@ -239,13 +239,13 @@ struct HomeView: View {
     }
 
     @ViewBuilder
-    private func cycleBadge(_ cycle: String) -> some View {
+    private func cycleBadge(_ cycle: CycleType) -> some View {
         let color: Color = switch cycle {
-            case "Endurance": .blue
-            case "Strength":  .green
-            default:          .red
+            case .endurance: .blue
+            case .strength:  .green
+            case .power:     .red
         }
-        Text(cycle)
+        Text(cycle.rawValue)
             .font(.caption.weight(.semibold))
             .padding(.horizontal, 8)
             .padding(.vertical, 4)
@@ -271,18 +271,20 @@ struct HomeView: View {
     // MARK: - Advance program
 
     private func advanceProgram() {
-        guard let state = appState else { return }
-        let phase = ProgramData.phases[safe: state.currentPhaseIndex]
-        let week = phase?.weeks[safe: state.currentWeekIndex]
+        // appState is always non-nil here: bootstrap seeds it before any UI renders,
+        // and advanceProgram is only reachable via a callback that requires appState to be non-nil.
+        let state = appState!
+        let phase = ProgramData.phases[state.currentPhaseIndex]
+        let week = phase.weeks[state.currentWeekIndex]
 
         var newDay = state.currentDayIndex + 1
         var newWeek = state.currentWeekIndex
         var newPhase = state.currentPhaseIndex
 
-        if newDay >= (week?.days.count ?? 4) {
+        if newDay >= week.days.count {
             newDay = 0
             newWeek += 1
-            if newWeek >= (phase?.weeks.count ?? 3) {
+            if newWeek >= phase.weeks.count {
                 newWeek = 0
                 newPhase = min(newPhase + 1, ProgramData.phases.count - 1)
             }

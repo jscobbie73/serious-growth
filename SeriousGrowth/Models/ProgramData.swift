@@ -2,6 +2,12 @@ import Foundation
 
 // MARK: - Domain Types
 
+enum CycleType: String, Codable {
+    case endurance = "Endurance"
+    case strength  = "Strength"
+    case power     = "Power"
+}
+
 struct MuscleGroupAssignment: Identifiable {
     let id = UUID()
     let muscleGroup: String
@@ -11,7 +17,7 @@ struct MuscleGroupAssignment: Identifiable {
 struct WorkoutDay: Identifiable {
     let id = UUID()
     let dayNumber: Int          // 1–4
-    let cycleType: String       // "Endurance" | "Strength" | "Power"
+    let cycleType: CycleType
     let assignments: [MuscleGroupAssignment]
     let restSeconds: Int
     let repRangeMin: Int
@@ -38,7 +44,7 @@ struct ProgramPhase: Identifiable {
 
 private func day(
     _ number: Int,
-    cycle: String,
+    cycle: CycleType,
     rest: Int,
     reps: ClosedRange<Int>,
     _ groups: (String, Int)...
@@ -64,13 +70,13 @@ enum ProgramData {
     // Standard 4-day templates reused across phases
     private static func standardDays4(rest: Int, cycleA: ClosedRange<Int>, cycleB: ClosedRange<Int>, cycleC: ClosedRange<Int>, sets: Int) -> [WorkoutDay] {
         [
-            day(1, cycle: "Endurance", rest: rest, reps: cycleA,
+            day(1, cycle: .endurance, rest: rest, reps: cycleA,
                 ("Back", sets), ("Chest", sets), ("Bicep", sets), ("Calf", sets)),
-            day(2, cycle: "Endurance", rest: rest, reps: cycleA,
+            day(2, cycle: .endurance, rest: rest, reps: cycleA,
                 ("Delts", sets), ("Tricep", sets), ("Thighs", sets), ("Abs", sets)),
-            day(3, cycle: "Strength", rest: rest, reps: cycleB,
+            day(3, cycle: .strength, rest: rest, reps: cycleB,
                 ("Back", sets), ("Chest", sets), ("Thighs", sets), ("Delts", 1), ("Calf", 2), ("Bicep", 1), ("Tricep", 1)),
-            day(4, cycle: "Power", rest: rest, reps: cycleC,
+            day(4, cycle: .power, rest: rest, reps: cycleC,
                 ("Thighs", sets), ("Chest", sets), ("Back", sets), ("Delts", 1), ("Calf", 2), ("Tricep", 1), ("Bicep", 1))
         ]
     }
@@ -95,13 +101,13 @@ enum ProgramData {
             phaseIndex: 1, weekStart: 4,
             weeks: (1...3).map { n in
                 week(n, days: [
-                    day(1, cycle: "Endurance", rest: 180, reps: 10...12,
+                    day(1, cycle: .endurance, rest: 180, reps: 10...12,
                         ("Back", 3), ("Chest", 3), ("Bicep", 3), ("Calf", 3)),
-                    day(2, cycle: "Endurance", rest: 180, reps: 10...12,
+                    day(2, cycle: .endurance, rest: 180, reps: 10...12,
                         ("Delts", 3), ("Tricep", 3), ("Thighs", 3), ("Abs", 3)),
-                    day(3, cycle: "Strength", rest: 180, reps: 8...10,
+                    day(3, cycle: .strength, rest: 180, reps: 8...10,
                         ("Back", 3), ("Chest", 3), ("Thighs", 3), ("Delts", 1), ("Calf", 2), ("Bicep", 1), ("Tricep", 1)),
-                    day(4, cycle: "Power", rest: 180, reps: 5...7,
+                    day(4, cycle: .power, rest: 180, reps: 5...7,
                         ("Thighs", 3), ("Chest", 3), ("Back", 3), ("Delts", 1), ("Calf", 2), ("Tricep", 1), ("Bicep", 1))
                 ])
             },
@@ -114,33 +120,33 @@ enum ProgramData {
             phaseIndex: 2, weekStart: 7,
             weeks: [
                 week(1, days: [
-                    day(1, cycle: "Endurance", rest: 150, reps: 13...15,
+                    day(1, cycle: .endurance, rest: 150, reps: 13...15,
                         ("Back", 3), ("Chest", 3), ("Thighs", 3), ("Calf", 3), ("Bicep", 3)),
-                    day(2, cycle: "Endurance", rest: 150, reps: 13...15,
+                    day(2, cycle: .endurance, rest: 150, reps: 13...15,
                         ("Chest", 3), ("Back", 3), ("Thighs", 3), ("Calf", 3), ("Tricep", 3)),
-                    day(3, cycle: "Strength", rest: 150, reps: 10...12,
+                    day(3, cycle: .strength, rest: 150, reps: 10...12,
                         ("Back", 3), ("Chest", 3), ("Thighs", 3), ("Delts", 1), ("Calf", 2), ("Bicep", 1), ("Tricep", 1)),
-                    day(4, cycle: "Power", rest: 150, reps: 8...10,
+                    day(4, cycle: .power, rest: 150, reps: 8...10,
                         ("Thighs", 3), ("Chest", 3), ("Back", 3), ("Delts", 1), ("Calf", 2), ("Tricep", 1), ("Bicep", 1))
                 ]),
                 week(2, days: [
-                    day(1, cycle: "Endurance", rest: 90, reps: 13...15,
+                    day(1, cycle: .endurance, rest: 90, reps: 13...15,
                         ("Back", 3), ("Chest", 3), ("Thighs", 3), ("Calf", 3), ("Bicep", 3)),
-                    day(2, cycle: "Endurance", rest: 90, reps: 13...15,
+                    day(2, cycle: .endurance, rest: 90, reps: 13...15,
                         ("Chest", 3), ("Back", 3), ("Thighs", 3), ("Calf", 3), ("Tricep", 2)),
-                    day(3, cycle: "Strength", rest: 90, reps: 10...12,
+                    day(3, cycle: .strength, rest: 90, reps: 10...12,
                         ("Thighs", 3), ("Chest", 3), ("Back", 3), ("Calf", 2), ("Delts", 1), ("Bicep", 1), ("Tricep", 1)),
-                    day(4, cycle: "Power", rest: 90, reps: 8...10,
+                    day(4, cycle: .power, rest: 90, reps: 8...10,
                         ("Back", 3), ("Chest", 3), ("Thighs", 3), ("Delts", 1), ("Calf", 2), ("Tricep", 1), ("Bicep", 1))
                 ]),
                 week(3, days: [
-                    day(1, cycle: "Endurance", rest: 60, reps: 13...15,
+                    day(1, cycle: .endurance, rest: 60, reps: 13...15,
                         ("Back", 4), ("Chest", 4), ("Thighs", 4), ("Calf", 4), ("Bicep", 4)),
-                    day(2, cycle: "Endurance", rest: 60, reps: 13...15,
+                    day(2, cycle: .endurance, rest: 60, reps: 13...15,
                         ("Chest", 4), ("Back", 4), ("Thighs", 4), ("Calf", 4), ("Tricep", 3)),
-                    day(3, cycle: "Strength", rest: 60, reps: 10...12,
+                    day(3, cycle: .strength, rest: 60, reps: 10...12,
                         ("Back", 4), ("Chest", 4), ("Thighs", 4), ("Calf", 3), ("Delts", 2), ("Tricep", 1), ("Bicep", 1)),
-                    day(4, cycle: "Power", rest: 60, reps: 8...10,
+                    day(4, cycle: .power, rest: 60, reps: 8...10,
                         ("Thighs", 4), ("Chest", 4), ("Back", 4), ("Calf", 3), ("Delts", 2), ("Tricep", 1), ("Bicep", 1))
                 ])
             ],
@@ -153,13 +159,13 @@ enum ProgramData {
             phaseIndex: 3, weekStart: 10,
             weeks: (1...3).map { n in
                 week(n, days: [
-                    day(1, cycle: "Endurance", rest: 90, reps: 13...15,
+                    day(1, cycle: .endurance, rest: 90, reps: 13...15,
                         ("Back", 4), ("Chest", 4), ("Bicep", 4), ("Calf", 4)),
-                    day(2, cycle: "Endurance", rest: 90, reps: 13...15,
+                    day(2, cycle: .endurance, rest: 90, reps: 13...15,
                         ("Delts", 4), ("Tricep", 4), ("Thighs", 4), ("Abs", 4)),
-                    day(3, cycle: "Strength", rest: 90, reps: 10...12,
+                    day(3, cycle: .strength, rest: 90, reps: 10...12,
                         ("Back", 4), ("Chest", 4), ("Calf", 2), ("Tricep", 1), ("Bicep", 1)),
-                    day(4, cycle: "Power", rest: 90, reps: 8...10,
+                    day(4, cycle: .power, rest: 90, reps: 8...10,
                         ("Thighs", 4), ("Chest", 4), ("Delts", 2), ("Calf", 2), ("Tricep", 1), ("Bicep", 1))
                 ])
             },
@@ -172,33 +178,33 @@ enum ProgramData {
             phaseIndex: 4, weekStart: 13,
             weeks: [
                 week(1, days: [
-                    day(1, cycle: "Endurance", rest: 120, reps: 13...15,
+                    day(1, cycle: .endurance, rest: 120, reps: 13...15,
                         ("Back", 3), ("Chest", 3), ("Bicep", 4), ("Calf", 3)),
-                    day(2, cycle: "Endurance", rest: 120, reps: 13...15,
+                    day(2, cycle: .endurance, rest: 120, reps: 13...15,
                         ("Delts", 4), ("Tricep", 4), ("Thighs", 3), ("Abs", 3)),
-                    day(3, cycle: "Strength", rest: 90, reps: 10...12,
+                    day(3, cycle: .strength, rest: 90, reps: 10...12,
                         ("Back", 3), ("Chest", 3), ("Thighs", 3), ("Calf", 2), ("Delts", 2)),
-                    day(4, cycle: "Power", rest: 60, reps: 8...10,
+                    day(4, cycle: .power, rest: 60, reps: 8...10,
                         ("Thighs", 3), ("Chest", 3), ("Back", 3), ("Delts", 2), ("Calf", 2))
                 ]),
                 week(2, days: [
-                    day(1, cycle: "Endurance", rest: 120, reps: 13...15,
+                    day(1, cycle: .endurance, rest: 120, reps: 13...15,
                         ("Back", 3), ("Chest", 3), ("Bicep", 4), ("Calf", 3)),
-                    day(2, cycle: "Endurance", rest: 120, reps: 13...15,
+                    day(2, cycle: .endurance, rest: 120, reps: 13...15,
                         ("Delts", 4), ("Tricep", 4), ("Thighs", 3), ("Abs", 3)),
-                    day(3, cycle: "Strength", rest: 90, reps: 10...12,
+                    day(3, cycle: .strength, rest: 90, reps: 10...12,
                         ("Back", 3), ("Chest", 3), ("Thighs", 3), ("Calf", 2), ("Delts", 2)),
-                    day(4, cycle: "Power", rest: 60, reps: 8...10,
+                    day(4, cycle: .power, rest: 60, reps: 8...10,
                         ("Thighs", 3), ("Chest", 3), ("Back", 3), ("Delts", 2), ("Calf", 2))
                 ]),
                 week(3, days: [
-                    day(1, cycle: "Endurance", rest: 120, reps: 13...15,
+                    day(1, cycle: .endurance, rest: 120, reps: 13...15,
                         ("Back", 4), ("Chest", 4), ("Bicep", 5), ("Calf", 4)),
-                    day(2, cycle: "Endurance", rest: 120, reps: 13...15,
+                    day(2, cycle: .endurance, rest: 120, reps: 13...15,
                         ("Delts", 5), ("Tricep", 5), ("Thighs", 4), ("Abs", 4)),
-                    day(3, cycle: "Strength", rest: 120, reps: 10...12,
+                    day(3, cycle: .strength, rest: 120, reps: 10...12,
                         ("Back", 4), ("Chest", 4), ("Thighs", 4), ("Calf", 2), ("Delts", 2)),
-                    day(4, cycle: "Power", rest: 120, reps: 8...10,
+                    day(4, cycle: .power, rest: 120, reps: 8...10,
                         ("Thighs", 4), ("Chest", 4), ("Back", 4), ("Delts", 2), ("Calf", 2))
                 ])
             ],
@@ -211,13 +217,13 @@ enum ProgramData {
             phaseIndex: 5, weekStart: 16,
             weeks: (1...3).map { n in
                 week(n, days: [
-                    day(1, cycle: "Endurance", rest: 60, reps: 13...15,
+                    day(1, cycle: .endurance, rest: 60, reps: 13...15,
                         ("Back", 4), ("Chest", 4), ("Bicep", 4), ("Calf", 4)),
-                    day(2, cycle: "Endurance", rest: 60, reps: 13...15,
+                    day(2, cycle: .endurance, rest: 60, reps: 13...15,
                         ("Delts", 4), ("Tricep", 4), ("Thighs", 4), ("Abs", 4)),
-                    day(3, cycle: "Strength", rest: 120, reps: 8...10,
+                    day(3, cycle: .strength, rest: 120, reps: 8...10,
                         ("Back", 3), ("Chest", 3), ("Thighs", 3), ("Delts", 1), ("Calf", 2), ("Bicep", 1), ("Tricep", 1)),
-                    day(4, cycle: "Power", rest: 180, reps: 4...6,
+                    day(4, cycle: .power, rest: 180, reps: 4...6,
                         ("Thighs", 3), ("Chest", 3), ("Back", 3), ("Delts", 1), ("Calf", 2), ("Tricep", 1), ("Bicep", 1))
                 ])
             },
@@ -237,10 +243,10 @@ enum ProgramData {
         week(phaseIndex: phaseIndex, weekIndex: weekIndex)?.days[safe: dayIndex]
     }
 
-    static var totalWeeks: Int { 18 }
+    static var totalWeeks: Int { phases.flatMap(\.weeks).count }
 
     // Overall program week number (1-based)
     static func overallWeek(phaseIndex: Int, weekIndex: Int) -> Int {
-        (phases[safe: phaseIndex]?.weekStart ?? 1) + weekIndex
+        phases[phaseIndex].weekStart + weekIndex
     }
 }

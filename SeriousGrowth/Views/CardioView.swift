@@ -106,7 +106,7 @@ struct CardioDetailRow: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
             HStack {
-                Label(session.cardioType.isEmpty ? "Cardio" : session.cardioType, systemImage: iconForType(session.cardioType))
+                Label(session.cardioType.rawValue, systemImage: iconForType(session.cardioType))
                     .font(.subheadline.weight(.semibold))
                 Spacer()
                 Text(session.date.formatted(date: .abbreviated, time: .omitted))
@@ -142,18 +142,18 @@ struct CardioDetailRow: View {
             .foregroundStyle(color)
     }
 
-    private func iconForType(_ type: String) -> String {
+    private func iconForType(_ type: CardioType) -> String {
         switch type {
-        case "Running": return "figure.run"
-        case "Walking": return "figure.walk"
-        case "Cycling": return "bicycle"
-        case "Swimming": return "figure.pool.swim"
-        case "Rowing": return "oar.2.crossed"
-        case "Elliptical": return "figure.elliptical"
-        case "Jump Rope": return "figure.jumprope"
-        case "HIIT": return "bolt.fill"
-        case "Stairmaster": return "stairs"
-        default: return "figure.run"
+        case .running:    return "figure.run"
+        case .walking:    return "figure.walk"
+        case .cycling:    return "bicycle"
+        case .swimming:   return "figure.pool.swim"
+        case .rowing:     return "oar.2.crossed"
+        case .elliptical: return "figure.elliptical"
+        case .jumpRope:   return "figure.jumprope"
+        case .hiit:       return "bolt.fill"
+        case .stairmaster: return "stairs"
+        case .other:      return "figure.run"
         }
     }
 }
@@ -165,7 +165,7 @@ struct LogCardioSheet: View {
     @Environment(\.dismiss) private var dismiss
 
     @State private var date = Date()
-    @State private var cardioType = "Running"
+    @State private var cardioType = CardioType.running
     @State private var hasDistance = false
     @State private var distanceMiles = 0.0
     @State private var hasDuration = false
@@ -183,7 +183,7 @@ struct LogCardioSheet: View {
 
                     Picker("Type", selection: $cardioType) {
                         ForEach(ExerciseLibrary.cardioTypes, id: \.self) { type in
-                            Text(type).tag(type)
+                            Text(type.rawValue).tag(type)
                         }
                     }
                 }

@@ -52,7 +52,7 @@ struct WorkoutSessionView: View {
                 }
                 .padding()
             }
-            .navigationTitle("Day \(workoutDay.dayNumber) — \(workoutDay.cycleType)")
+            .navigationTitle("Day \(workoutDay.dayNumber) — \(workoutDay.cycleType.rawValue)")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
@@ -157,13 +157,13 @@ struct WorkoutSessionView: View {
     }
 
     private func preferredExercise(for group: String) -> String {
-        // Use most recently performed exercise for this group, or first default
         let recent = allSessions
+            .sorted { $0.date > $1.date }
             .flatMap { $0.sessionExercises }
-            .filter { $0.muscleGroup == group }
-            .sorted { $0.sortOrder > $1.sortOrder }
-            .first?.exerciseName
-        return recent ?? ExerciseLibrary.defaultExercises(for: group).first ?? group
+            .first { $0.muscleGroup == group }?
+            .exerciseName
+        // defaultExercises returns a non-empty list for every known muscle group; group is always from ProgramData's hardcoded assignments.
+        return recent ?? ExerciseLibrary.defaultExercises(for: group).first!
     }
 
     private func recommendedWeight(for exerciseName: String) -> Double {

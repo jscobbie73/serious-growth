@@ -101,13 +101,28 @@ final class WorkoutSet {
     }
 }
 
+// MARK: - CardioType
+
+enum CardioType: String, Codable {
+    case running   = "Running"
+    case walking   = "Walking"
+    case cycling   = "Cycling"
+    case swimming  = "Swimming"
+    case rowing    = "Rowing"
+    case elliptical = "Elliptical"
+    case jumpRope  = "Jump Rope"
+    case hiit      = "HIIT"
+    case stairmaster = "Stairmaster"
+    case other     = "Other"
+}
+
 // MARK: - CardioSession
 
 @Model
 final class CardioSession {
     var id: UUID
     var date: Date
-    var cardioType: String
+    var cardioType: CardioType
     var distanceMiles: Double
     var durationSeconds: Int
     var avgHeartRate: Int
@@ -128,7 +143,7 @@ final class CardioSession {
     init(date: Date = Date()) {
         self.id = UUID()
         self.date = date
-        self.cardioType = "Running"
+        self.cardioType = .running
         self.distanceMiles = 0
         self.durationSeconds = 0
         self.avgHeartRate = 0

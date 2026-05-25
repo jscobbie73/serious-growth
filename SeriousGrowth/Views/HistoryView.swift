@@ -186,7 +186,7 @@ struct WorkoutDetailView: View {
                             Text("Set \(set.setNumber)")
                             Spacer()
                             if set.isCompleted {
-                                Text("\(set.weight > 0 ? formatWeight(set.weight) : "BW") \(set.weight > 0 ? unit : "")  ×\(set.completedReps)")
+                                Text("\(set.weight > 0 ? set.weight.formattedAsWeight : "BW") \(set.weight > 0 ? unit : "")  ×\(set.completedReps)")
                                     .foregroundStyle(.primary)
                                 Image(systemName: "checkmark.circle.fill").foregroundStyle(.green)
                             } else {
@@ -201,14 +201,6 @@ struct WorkoutDetailView: View {
         .navigationBarTitleDisplayMode(.inline)
     }
 
-    private func formatDuration(_ s: Int) -> String {
-        let h = s / 3600; let m = (s % 3600) / 60
-        return h > 0 ? "\(h)h \(m)m" : "\(m)m"
-    }
-
-    private func formatWeight(_ w: Double) -> String {
-        w.truncatingRemainder(dividingBy: 1) == 0 ? String(format: "%.0f", w) : String(format: "%.1f", w)
-    }
 }
 
 // MARK: - WeightProgressView
@@ -337,17 +329,17 @@ struct WeightProgressView: View {
             .padding(.horizontal)
         }
         .padding(.vertical)
-        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 16))
+        .cardMaterial()
         .padding(.horizontal)
     }
 
     private var personalRecordCards: some View {
         HStack(spacing: 12) {
             if let pr = chartData.max(by: { $0.weight < $1.weight }) {
-                statCard(value: formatWeight(pr.weight) + " \(unit)", label: "Personal Record", icon: "trophy.fill", color: .yellow)
+                statCard(value: pr.weight.formattedAsWeight + " \(unit)", label: "Personal Record", icon: "trophy.fill", color: .yellow)
             }
             if let last = chartData.last {
-                statCard(value: formatWeight(last.weight) + " \(unit)", label: "Last Session", icon: "clock.fill", color: .blue)
+                statCard(value: last.weight.formattedAsWeight + " \(unit)", label: "Last Session", icon: "clock.fill", color: .blue)
             }
             statCard(value: "\(chartData.count)", label: "Sessions", icon: "calendar", color: .green)
         }
@@ -363,10 +355,6 @@ struct WeightProgressView: View {
         .frame(maxWidth: .infinity)
         .padding()
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 12))
-    }
-
-    private func formatWeight(_ w: Double) -> String {
-        w.truncatingRemainder(dividingBy: 1) == 0 ? String(format: "%.0f", w) : String(format: "%.1f", w)
     }
 
     struct WeightPoint: Identifiable {
