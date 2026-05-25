@@ -92,8 +92,6 @@ struct CardioView: View {
 
 }
 
-// MARK: - CardioDetailRow
-
 struct CardioDetailRow: View {
     let session: CardioSession
 
@@ -151,8 +149,6 @@ struct CardioDetailRow: View {
         }
     }
 }
-
-// MARK: - LogCardioSheet
 
 struct LogCardioSheet: View {
     @Environment(\.modelContext) private var context

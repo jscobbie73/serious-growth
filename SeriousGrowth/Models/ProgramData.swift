@@ -158,13 +158,13 @@ enum ProgramData {
             weeks: (1...3).map { n in
                 week(n, days: [
                     day(1, cycle: .endurance, rest: 90, reps: 13...15,
-                        ("Back", 4), ("Chest", 4), ("Bicep", 4), ("Calf", 4)),
+                        (.back, 4), (.chest, 4), (.bicep, 4), (.calf, 4)),
                     day(2, cycle: .endurance, rest: 90, reps: 13...15,
-                        ("Delts", 4), ("Tricep", 4), ("Thighs", 4), ("Abs", 4)),
+                        (.delts, 4), (.tricep, 4), (.thighs, 4), (.abs, 4)),
                     day(3, cycle: .strength, rest: 90, reps: 10...12,
-                        ("Back", 4), ("Chest", 4), ("Calf", 2), ("Tricep", 1), ("Bicep", 1)),
+                        (.back, 4), (.chest, 4), (.calf, 2), (.tricep, 1), (.bicep, 1)),
                     day(4, cycle: .power, rest: 90, reps: 8...10,
-                        ("Thighs", 4), ("Chest", 4), ("Delts", 2), ("Calf", 2), ("Tricep", 1), ("Bicep", 1))
+                        (.thighs, 4), (.chest, 4), (.delts, 2), (.calf, 2), (.tricep, 1), (.bicep, 1))
                 ])
             },
             focusDescription: "Optimal zone training, 90s rest, 13–15 reps endurance"
@@ -177,33 +177,33 @@ enum ProgramData {
             weeks: [
                 week(1, days: [
                     day(1, cycle: .endurance, rest: 120, reps: 13...15,
-                        ("Back", 3), ("Chest", 3), ("Bicep", 4), ("Calf", 3)),
+                        (.back, 3), (.chest, 3), (.bicep, 4), (.calf, 3)),
                     day(2, cycle: .endurance, rest: 120, reps: 13...15,
-                        ("Delts", 4), ("Tricep", 4), ("Thighs", 3), ("Abs", 3)),
+                        (.delts, 4), (.tricep, 4), (.thighs, 3), (.abs, 3)),
                     day(3, cycle: .strength, rest: 90, reps: 10...12,
-                        ("Back", 3), ("Chest", 3), ("Thighs", 3), ("Calf", 2), ("Delts", 2)),
+                        (.back, 3), (.chest, 3), (.thighs, 3), (.calf, 2), (.delts, 2)),
                     day(4, cycle: .power, rest: 60, reps: 8...10,
-                        ("Thighs", 3), ("Chest", 3), ("Back", 3), ("Delts", 2), ("Calf", 2))
+                        (.thighs, 3), (.chest, 3), (.back, 3), (.delts, 2), (.calf, 2))
                 ]),
                 week(2, days: [
                     day(1, cycle: .endurance, rest: 120, reps: 13...15,
-                        ("Back", 3), ("Chest", 3), ("Bicep", 4), ("Calf", 3)),
+                        (.back, 3), (.chest, 3), (.bicep, 4), (.calf, 3)),
                     day(2, cycle: .endurance, rest: 120, reps: 13...15,
-                        ("Delts", 4), ("Tricep", 4), ("Thighs", 3), ("Abs", 3)),
+                        (.delts, 4), (.tricep, 4), (.thighs, 3), (.abs, 3)),
                     day(3, cycle: .strength, rest: 90, reps: 10...12,
-                        ("Back", 3), ("Chest", 3), ("Thighs", 3), ("Calf", 2), ("Delts", 2)),
+                        (.back, 3), (.chest, 3), (.thighs, 3), (.calf, 2), (.delts, 2)),
                     day(4, cycle: .power, rest: 60, reps: 8...10,
-                        ("Thighs", 3), ("Chest", 3), ("Back", 3), ("Delts", 2), ("Calf", 2))
+                        (.thighs, 3), (.chest, 3), (.back, 3), (.delts, 2), (.calf, 2))
                 ]),
                 week(3, days: [
                     day(1, cycle: .endurance, rest: 120, reps: 13...15,
-                        ("Back", 4), ("Chest", 4), ("Bicep", 5), ("Calf", 4)),
+                        (.back, 4), (.chest, 4), (.bicep, 5), (.calf, 4)),
                     day(2, cycle: .endurance, rest: 120, reps: 13...15,
-                        ("Delts", 5), ("Tricep", 5), ("Thighs", 4), ("Abs", 4)),
+                        (.delts, 5), (.tricep, 5), (.thighs, 4), (.abs, 4)),
                     day(3, cycle: .strength, rest: 120, reps: 10...12,
-                        ("Back", 4), ("Chest", 4), ("Thighs", 4), ("Calf", 2), ("Delts", 2)),
+                        (.back, 4), (.chest, 4), (.thighs, 4), (.calf, 2), (.delts, 2)),
                     day(4, cycle: .power, rest: 120, reps: 8...10,
-                        ("Thighs", 4), ("Chest", 4), ("Back", 4), ("Delts", 2), ("Calf", 2))
+                        (.thighs, 4), (.chest, 4), (.back, 4), (.delts, 2), (.calf, 2))
                 ])
             ],
             focusDescription: "Progressive volume increase, sub-optimal → optimal zone"
@@ -216,13 +216,13 @@ enum ProgramData {
             weeks: (1...3).map { n in
                 week(n, days: [
                     day(1, cycle: .endurance, rest: 60, reps: 13...15,
-                        ("Back", 4), ("Chest", 4), ("Bicep", 4), ("Calf", 4)),
+                        (.back, 4), (.chest, 4), (.bicep, 4), (.calf, 4)),
                     day(2, cycle: .endurance, rest: 60, reps: 13...15,
-                        ("Delts", 4), ("Tricep", 4), ("Thighs", 4), ("Abs", 4)),
+                        (.delts, 4), (.tricep, 4), (.thighs, 4), (.abs, 4)),
                     day(3, cycle: .strength, rest: 120, reps: 8...10,
-                        ("Back", 3), ("Chest", 3), ("Thighs", 3), ("Delts", 1), ("Calf", 2), ("Bicep", 1), ("Tricep", 1)),
+                        (.back, 3), (.chest, 3), (.thighs, 3), (.delts, 1), (.calf, 2), (.bicep, 1), (.tricep, 1)),
                     day(4, cycle: .power, rest: 180, reps: 4...6,
-                        ("Thighs", 3), ("Chest", 3), ("Back", 3), ("Delts", 1), ("Calf", 2), ("Tricep", 1), ("Bicep", 1))
+                        (.thighs, 3), (.chest, 3), (.back, 3), (.delts, 1), (.calf, 2), (.tricep, 1), (.bicep, 1))
                 ])
             },
             focusDescription: "Peak training, 60–180s rest, mixed rep ranges"

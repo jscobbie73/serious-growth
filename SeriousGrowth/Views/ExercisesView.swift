@@ -20,7 +20,6 @@ struct ExercisesView: View {
     var body: some View {
         NavigationStack {
             VStack(spacing: 0) {
-                // Muscle group filter
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 8) {
                         ForEach(ExerciseLibrary.muscleGroups, id: \.self) { group in
@@ -97,8 +96,6 @@ struct ExercisesView: View {
         }
     }
 }
-
-// MARK: - AddExerciseSheet
 
 struct AddExerciseSheet: View {
     let defaultGroup: String

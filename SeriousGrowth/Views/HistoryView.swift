@@ -193,8 +193,6 @@ struct WorkoutDetailView: View {
 
 }
 
-// MARK: - WeightProgressView
-
 struct WeightProgressView: View {
     @Query(sort: \WorkoutSession.date) private var sessions: [WorkoutSession]
     @Query private var appStates: [AppState]
@@ -227,7 +225,6 @@ struct WeightProgressView: View {
     var body: some View {
         ScrollView {
             VStack(spacing: 16) {
-                // Muscle group picker
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 8) {
                         ForEach(ExerciseLibrary.muscleGroups, id: \.self) { group in
@@ -253,7 +250,6 @@ struct WeightProgressView: View {
                         .foregroundStyle(.secondary)
                         .padding()
                 } else {
-                    // Exercise picker
                     Picker("Exercise", selection: Binding(
                         get: { selectedExercise ?? exercisesForGroup.first ?? "" },
                         set: { selectedExercise = $0 }
