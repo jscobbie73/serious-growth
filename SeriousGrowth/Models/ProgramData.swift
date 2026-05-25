@@ -243,7 +243,6 @@ enum ProgramData {
 
     static var totalWeeks: Int { phases.flatMap(\.weeks).count }
 
-    // Overall program week number (1-based)
     static func overallWeek(phaseIndex: Int, weekIndex: Int) -> Int {
         phases[phaseIndex].weekStart + weekIndex
     }
