@@ -1,22 +1,33 @@
 import SwiftData
 import Foundation
 
+// MARK: - MuscleGroup
+
+enum MuscleGroup: String, Codable, CaseIterable, Identifiable {
+    case back    = "Back"
+    case chest   = "Chest"
+    case bicep   = "Bicep"
+    case calf    = "Calf"
+    case delts   = "Delts"
+    case tricep  = "Tricep"
+    case thighs  = "Thighs"
+    case abs     = "Abs"
+
+    var id: String { rawValue }
+}
+
 // MARK: - Exercise
 
 @Model
 final class Exercise {
-    var id: UUID
     var name: String
-    var muscleGroup: String
+    var muscleGroup: MuscleGroup
     var isCustom: Bool
-    var createdAt: Date
 
-    init(name: String, muscleGroup: String, isCustom: Bool = false) {
-        self.id = UUID()
+    init(name: String, muscleGroup: MuscleGroup, isCustom: Bool = false) {
         self.name = name
         self.muscleGroup = muscleGroup
         self.isCustom = isCustom
-        self.createdAt = Date()
     }
 }
 
@@ -24,7 +35,6 @@ final class Exercise {
 
 @Model
 final class WorkoutSession {
-    var id: UUID
     var date: Date
     var phaseIndex: Int
     var weekIndex: Int
@@ -34,12 +44,9 @@ final class WorkoutSession {
 
     @Relationship(deleteRule: .cascade) var sessionExercises: [SessionExercise]
 
-    var isCompleted: Bool { !sessionExercises.isEmpty }
-
     var dayLabel: String { "Day \(dayIndex + 1)" }
 
     init(phaseIndex: Int, weekIndex: Int, dayIndex: Int) {
-        self.id = UUID()
         self.date = Date()
         self.phaseIndex = phaseIndex
         self.weekIndex = weekIndex
@@ -54,21 +61,13 @@ final class WorkoutSession {
 
 @Model
 final class SessionExercise {
-    var id: UUID
     var exerciseName: String
-    var muscleGroup: String
+    var muscleGroup: MuscleGroup
     var sortOrder: Int
 
     @Relationship(deleteRule: .cascade) var sets: [WorkoutSet]
 
-    var isCompleted: Bool { !sets.isEmpty && sets.allSatisfy { $0.isCompleted } }
-
-    var lastCompletedWeight: Double {
-        sets.filter { $0.isCompleted }.last?.weight ?? 0
-    }
-
-    init(exerciseName: String, muscleGroup: String, sortOrder: Int) {
-        self.id = UUID()
+    init(exerciseName: String, muscleGroup: MuscleGroup, sortOrder: Int) {
         self.exerciseName = exerciseName
         self.muscleGroup = muscleGroup
         self.sortOrder = sortOrder
@@ -80,7 +79,6 @@ final class SessionExercise {
 
 @Model
 final class WorkoutSet {
-    var id: UUID
     var setNumber: Int
     var targetRepsMin: Int
     var targetRepsMax: Int
@@ -91,7 +89,6 @@ final class WorkoutSet {
     var targetRepsLabel: String { "\(targetRepsMin)–\(targetRepsMax)" }
 
     init(setNumber: Int, targetRepsMin: Int, targetRepsMax: Int, weight: Double = 0) {
-        self.id = UUID()
         self.setNumber = setNumber
         self.targetRepsMin = targetRepsMin
         self.targetRepsMax = targetRepsMax
@@ -120,7 +117,6 @@ enum CardioType: String, Codable {
 
 @Model
 final class CardioSession {
-    var id: UUID
     var date: Date
     var cardioType: CardioType
     var distanceMiles: Double
@@ -141,7 +137,6 @@ final class CardioSession {
     }
 
     init(date: Date = Date()) {
-        self.id = UUID()
         self.date = date
         self.cardioType = .running
         self.distanceMiles = 0
@@ -158,19 +153,15 @@ final class CardioSession {
 
 @Model
 final class AppState {
-    var id: UUID
     var currentPhaseIndex: Int
     var currentWeekIndex: Int
     var currentDayIndex: Int
-    var programStartDate: Date
     var useKilograms: Bool
 
     init() {
-        self.id = UUID()
         self.currentPhaseIndex = 0
         self.currentWeekIndex = 0
         self.currentDayIndex = 0
-        self.programStartDate = Date()
         self.useKilograms = false
     }
 }
@@ -197,3 +188,16 @@ extension Int {
     }
 }
 
+import SwiftUI
+
+struct CardMaterial: ViewModifier {
+    func body(content: Content) -> some View {
+        content.background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 16))
+    }
+}
+
+extension View {
+    func cardMaterial() -> some View {
+        modifier(CardMaterial())
+    }
+}

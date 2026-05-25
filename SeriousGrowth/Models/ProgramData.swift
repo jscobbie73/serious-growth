@@ -10,7 +10,7 @@ enum CycleType: String, Codable {
 
 struct MuscleGroupAssignment: Identifiable {
     let id = UUID()
-    let muscleGroup: String
+    let muscleGroup: MuscleGroup
     let sets: Int
 }
 
@@ -47,7 +47,7 @@ private func day(
     cycle: CycleType,
     rest: Int,
     reps: ClosedRange<Int>,
-    _ groups: (String, Int)...
+    _ groups: (MuscleGroup, Int)...
 ) -> WorkoutDay {
     WorkoutDay(
         dayNumber: number,
@@ -71,13 +71,13 @@ enum ProgramData {
     private static func standardDays4(rest: Int, cycleA: ClosedRange<Int>, cycleB: ClosedRange<Int>, cycleC: ClosedRange<Int>, sets: Int) -> [WorkoutDay] {
         [
             day(1, cycle: .endurance, rest: rest, reps: cycleA,
-                ("Back", sets), ("Chest", sets), ("Bicep", sets), ("Calf", sets)),
+                (.back, sets), (.chest, sets), (.bicep, sets), (.calf, sets)),
             day(2, cycle: .endurance, rest: rest, reps: cycleA,
-                ("Delts", sets), ("Tricep", sets), ("Thighs", sets), ("Abs", sets)),
+                (.delts, sets), (.tricep, sets), (.thighs, sets), (.abs, sets)),
             day(3, cycle: .strength, rest: rest, reps: cycleB,
-                ("Back", sets), ("Chest", sets), ("Thighs", sets), ("Delts", 1), ("Calf", 2), ("Bicep", 1), ("Tricep", 1)),
+                (.back, sets), (.chest, sets), (.thighs, sets), (.delts, 1), (.calf, 2), (.bicep, 1), (.tricep, 1)),
             day(4, cycle: .power, rest: rest, reps: cycleC,
-                ("Thighs", sets), ("Chest", sets), ("Back", sets), ("Delts", 1), ("Calf", 2), ("Tricep", 1), ("Bicep", 1))
+                (.thighs, sets), (.chest, sets), (.back, sets), (.delts, 1), (.calf, 2), (.tricep, 1), (.bicep, 1))
         ]
     }
 
@@ -102,13 +102,13 @@ enum ProgramData {
             weeks: (1...3).map { n in
                 week(n, days: [
                     day(1, cycle: .endurance, rest: 180, reps: 10...12,
-                        ("Back", 3), ("Chest", 3), ("Bicep", 3), ("Calf", 3)),
+                        (.back, 3), (.chest, 3), (.bicep, 3), (.calf, 3)),
                     day(2, cycle: .endurance, rest: 180, reps: 10...12,
-                        ("Delts", 3), ("Tricep", 3), ("Thighs", 3), ("Abs", 3)),
+                        (.delts, 3), (.tricep, 3), (.thighs, 3), (.abs, 3)),
                     day(3, cycle: .strength, rest: 180, reps: 8...10,
-                        ("Back", 3), ("Chest", 3), ("Thighs", 3), ("Delts", 1), ("Calf", 2), ("Bicep", 1), ("Tricep", 1)),
+                        (.back, 3), (.chest, 3), (.thighs, 3), (.delts, 1), (.calf, 2), (.bicep, 1), (.tricep, 1)),
                     day(4, cycle: .power, rest: 180, reps: 5...7,
-                        ("Thighs", 3), ("Chest", 3), ("Back", 3), ("Delts", 1), ("Calf", 2), ("Tricep", 1), ("Bicep", 1))
+                        (.thighs, 3), (.chest, 3), (.back, 3), (.delts, 1), (.calf, 2), (.tricep, 1), (.bicep, 1))
                 ])
             },
             focusDescription: "Hypo-zone training, 180s rest, 10–12 reps endurance"

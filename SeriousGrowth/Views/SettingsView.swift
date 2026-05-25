@@ -47,10 +47,10 @@ struct SettingsView: View {
 
                 Section {
                     Button("Reset Program Position", role: .destructive) {
-                        state?.currentPhaseIndex = 0
-                        state?.currentWeekIndex = 0
-                        state?.currentDayIndex = 0
-                        state?.programStartDate = Date()
+                        // Bootstrap always seeds AppState before any UI renders.
+                        state!.currentPhaseIndex = 0
+                        state!.currentWeekIndex = 0
+                        state!.currentDayIndex = 0
                     }
                 }
             }

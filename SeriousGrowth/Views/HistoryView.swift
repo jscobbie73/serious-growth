@@ -2,8 +2,6 @@ import SwiftUI
 import SwiftData
 import Charts
 
-// MARK: - HistoryView
-
 struct HistoryView: View {
     @Query(sort: \WorkoutSession.date, order: .reverse) private var sessions: [WorkoutSession]
     @Query(sort: \CardioSession.date, order: .reverse) private var cardioSessions: [CardioSession]
@@ -77,8 +75,6 @@ struct HistoryView: View {
         }
     }
 
-    // MARK: - Charts
-
     private var chartsView: some View {
         WeightProgressView()
     }
@@ -95,8 +91,6 @@ struct HistoryView: View {
         }
     }
 }
-
-// MARK: - WorkoutRowView
 
 struct WorkoutRowView: View {
     let session: WorkoutSession
@@ -122,8 +116,6 @@ struct WorkoutRowView: View {
         .padding(.vertical, 2)
     }
 }
-
-// MARK: - CardioRowView
 
 struct CardioRowView: View {
     let session: CardioSession
@@ -158,8 +150,6 @@ struct CardioRowView: View {
         .padding(.vertical, 2)
     }
 }
-
-// MARK: - WorkoutDetailView
 
 struct WorkoutDetailView: View {
     let session: WorkoutSession

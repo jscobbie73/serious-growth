@@ -67,13 +67,13 @@ struct WorkoutSessionView: View {
                 Button("Cancel", role: .cancel) {}
             }
             .sheet(item: $showExercisePicker) { assignment in
-                if let session {
-                    ExercisePickerView(
-                        muscleGroup: assignment.muscleGroup,
-                        allExercises: allExercises.filter { $0.muscleGroup == assignment.muscleGroup }
-                    ) { chosen in
-                        swapExercise(in: session, forGroup: assignment.muscleGroup, to: chosen)
-                    }
+                // showExercisePicker is only set from ExerciseCard buttons, which are
+                // rendered inside `if let session`, so session is guaranteed non-nil here.
+                ExercisePickerView(
+                    muscleGroup: assignment.muscleGroup,
+                    allExercises: allExercises.filter { $0.muscleGroup == assignment.muscleGroup }
+                ) { chosen in
+                    swapExercise(in: session!, forGroup: assignment.muscleGroup, to: chosen)
                 }
             }
             .onAppear { setupSession() }
@@ -178,14 +178,16 @@ struct WorkoutSessionView: View {
     }
 
     private func swapExercise(in session: WorkoutSession, forGroup group: String, to newName: String) {
-        guard let ex = session.sessionExercises.first(where: { $0.muscleGroup == group }) else { return }
+        // session was built from workoutDay.assignments, which always contains an entry for every group.
+        let ex = session.sessionExercises.first(where: { $0.muscleGroup == group })!
         ex.exerciseName = newName
         let recWeight = recommendedWeight(for: newName)
         for set in ex.sets { set.weight = recWeight }
     }
 
     private func finishWorkout() {
-        session?.durationSeconds = Int(Date().timeIntervalSince(workoutStartTime))
+        // session is always set by setupSession() in onAppear before the Finish button is reachable.
+        session!.durationSeconds = Int(Date().timeIntervalSince(workoutStartTime))
         onComplete()
         dismiss()
     }
