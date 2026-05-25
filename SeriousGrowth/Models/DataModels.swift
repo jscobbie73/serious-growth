@@ -36,10 +36,6 @@ final class WorkoutSession {
 
     var isCompleted: Bool { !sessionExercises.isEmpty }
 
-    var phaseLabel: String {
-        ProgramData.phases[safe: phaseIndex]?.name ?? "Phase \(phaseIndex + 1)"
-    }
-
     var dayLabel: String { "Day \(dayIndex + 1)" }
 
     init(phaseIndex: Int, weekIndex: Int, dayIndex: Int) {
@@ -169,5 +165,33 @@ final class AppState {
 extension Array {
     subscript(safe index: Int) -> Element? {
         indices.contains(index) ? self[index] : nil
+    }
+}
+
+extension Double {
+    var formattedAsWeight: String {
+        truncatingRemainder(dividingBy: 1) == 0 ? String(format: "%.0f", self) : String(format: "%.1f", self)
+    }
+}
+
+extension Int {
+    var formattedAsDuration: String {
+        let h = self / 3600
+        let m = (self % 3600) / 60
+        return h > 0 ? "\(h)h \(m)m" : "\(m)m"
+    }
+}
+
+import SwiftUI
+
+struct CardMaterial: ViewModifier {
+    func body(content: Content) -> some View {
+        content.background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 16))
+    }
+}
+
+extension View {
+    func cardMaterial() -> some View {
+        modifier(CardMaterial())
     }
 }

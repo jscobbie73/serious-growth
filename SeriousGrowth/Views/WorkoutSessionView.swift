@@ -229,7 +229,7 @@ struct ExerciseCard: View {
             }
 
             if recommendedWeight > 0 {
-                Label("Recommended: \(formatWeight(recommendedWeight)) \(unitLabel)",
+                Label("Recommended: \(recommendedWeight.formattedAsWeight) \(unitLabel)",
                       systemImage: "arrow.up.circle.fill")
                     .font(.caption)
                     .foregroundStyle(.blue)
@@ -251,11 +251,7 @@ struct ExerciseCard: View {
             }
         }
         .padding()
-        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 16))
-    }
-
-    private func formatWeight(_ w: Double) -> String {
-        w.truncatingRemainder(dividingBy: 1) == 0 ? String(format: "%.0f", w) : String(format: "%.1f", w)
+        .cardMaterial()
     }
 }
 
@@ -319,14 +315,10 @@ struct SetRow: View {
             .frame(width: 32)
         }
         .onAppear {
-            weightText = set.weight > 0 ? formatWeight(set.weight) : ""
+            weightText = set.weight > 0 ? set.weight.formattedAsWeight : ""
             repsText = "\(set.completedReps)"
         }
         .opacity(set.isCompleted ? 0.7 : 1.0)
-    }
-
-    private func formatWeight(_ w: Double) -> String {
-        w.truncatingRemainder(dividingBy: 1) == 0 ? String(format: "%.0f", w) : String(format: "%.1f", w)
     }
 }
 

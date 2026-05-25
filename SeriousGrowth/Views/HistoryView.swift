@@ -107,7 +107,7 @@ struct WorkoutRowView: View {
                 Text(session.date.formatted(date: .abbreviated, time: .omitted))
                     .font(.subheadline.weight(.semibold))
                 Spacer()
-                Text(session.phaseLabel)
+                Text(ProgramData.phases[safe: session.phaseIndex]?.name ?? "Phase \(session.phaseIndex + 1)")
                     .font(.caption)
                     .foregroundStyle(.orange)
             }
@@ -172,10 +172,10 @@ struct WorkoutDetailView: View {
         List {
             Section("Summary") {
                 LabeledContent("Date", value: session.date.formatted(date: .long, time: .shortened))
-                LabeledContent("Phase", value: session.phaseLabel)
+                LabeledContent("Phase", value: ProgramData.phases[safe: session.phaseIndex]?.name ?? "Phase \(session.phaseIndex + 1)")
                 LabeledContent("Day", value: session.dayLabel)
                 if session.durationSeconds > 0 {
-                    LabeledContent("Duration", value: formatDuration(session.durationSeconds))
+                    LabeledContent("Duration", value: session.durationSeconds.formattedAsDuration)
                 }
             }
 
@@ -368,10 +368,10 @@ struct WeightProgressView: View {
     private func formatWeight(_ w: Double) -> String {
         w.truncatingRemainder(dividingBy: 1) == 0 ? String(format: "%.0f", w) : String(format: "%.1f", w)
     }
-}
 
-struct WeightPoint: Identifiable {
-    let id = UUID()
-    let date: Date
-    let weight: Double
+    struct WeightPoint: Identifiable {
+        let id = UUID()
+        let date: Date
+        let weight: Double
+    }
 }
